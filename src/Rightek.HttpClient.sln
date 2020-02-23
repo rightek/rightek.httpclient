@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rightek.HttpClient", "Rightek.HttpClient\Rightek.HttpClient.csproj", "{FB323D7D-34CC-41A9-B6C8-791A43281AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rightek.HttpClient.Tests", "Rightek.HttpClient.Tests\Rightek.HttpClient.Tests.csproj", "{20155FDC-1580-4913-B1A5-B161356D58CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB323D7D-34CC-41A9-B6C8-791A43281AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB323D7D-34CC-41A9-B6C8-791A43281AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB323D7D-34CC-41A9-B6C8-791A43281AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB323D7D-34CC-41A9-B6C8-791A43281AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20155FDC-1580-4913-B1A5-B161356D58CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20155FDC-1580-4913-B1A5-B161356D58CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20155FDC-1580-4913-B1A5-B161356D58CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20155FDC-1580-4913-B1A5-B161356D58CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9BDEE347-65FA-46B5-BB1D-4577515AC068}
+	EndGlobalSection
+EndGlobal

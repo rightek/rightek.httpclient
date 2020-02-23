@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net461</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Mehdi Dehghani</Authors>
+    <Company>Rightek</Company>
+    <Copyright>Rightek</Copyright>
+
+    <Version>2.1.0</Version>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <RepositoryUrl>https://github.com/rightek/Rightek.HttpClient</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/rightek/Rightek.HttpClient</PackageProjectUrl>
+    <PackageReadmeFile>https://github.com/rightek/Rightek.HttpClient/blob/master/README.md</PackageReadmeFile>
+
+    <PackageId>Rightek.HttpClient</PackageId>
+    <Title>Rightek.HttpClient</Title>
+    <Description>Simple wrapper around `System.Net.Http.HttpClient`</Description>
+    <PackageTags>netstandard netcore http http-client</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>
