@@ -13,7 +13,7 @@ public class WhatTypeOfMusicDoYouLove
 ```cs
 var uri = "https://dl.dropboxusercontent.com/s/pqm5s3kx64q03fc/Rightek.HttpClient.json";
 var res = await Client.Instance
-	.Init()
+    .Init()
     .WithUri(uri)
     .GetAsync<WhatTypeOfMusicDoYouLove>();
 
