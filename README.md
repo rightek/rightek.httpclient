@@ -13,6 +13,7 @@ public class WhatTypeOfMusicDoYouLove
 ```cs
 var uri = "https://dl.dropboxusercontent.com/s/pqm5s3kx64q03fc/Rightek.HttpClient.json";
 var res = await Client.Instance
+	.Init()
     .WithUri(uri)
     .GetAsync<WhatTypeOfMusicDoYouLove>();
 
@@ -33,6 +34,7 @@ else
 
 ## Config API
 
+- `Init`:  Initial HttpClient, here you can configure the proxy
 - `WithUri`:  Request uri
 - `WithBasicAuth`:  Basic authentication mode
 - `WithBearerToken`: Bearer token authentication mode

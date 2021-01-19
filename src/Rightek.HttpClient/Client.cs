@@ -16,28 +16,39 @@ using Cookie = Rightek.HttpClient.Dtos.Cookie;
 
 namespace Rightek.HttpClient
 {
-    public sealed class Client : IClient, IRequest
+    public sealed class Client : IInit, IClient, IRequest
     {
-        readonly System.Net.Http.HttpClient _httpClient;
-        readonly Settings _defaultSettings;
+        static System.Net.Http.HttpClient _httpClient;
+        static Settings _defaultSettings;
 
         Settings _requestSettings;
 
-        #region Singleton
+        public static IInit Instance { get; } = new Client();
 
-        Client()
+        public IClient Init(Proxy proxy = null)
         {
+            if (_httpClient != null) return this;
+
             var handler = new HttpClientHandler { UseCookies = false };
             if (handler.SupportsAutomaticDecompression) handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            if (proxy != null)
+            {
+                handler.Proxy = new WebProxy
+                {
+                    Address = new Uri($"http://{proxy.Host}:{proxy.Port}"),
+                    BypassProxyOnLocal = false,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(userName: proxy.Username, password: proxy.Password)
+                };
+            }
 
             _httpClient = new System.Net.Http.HttpClient(handler);
 
             _defaultSettings = new Settings();
+
+            return this;
         }
-
-        public static IClient Instance { get; } = new Client();
-
-        #endregion Singleton
 
         public IRequest WithUri(string uri)
         {

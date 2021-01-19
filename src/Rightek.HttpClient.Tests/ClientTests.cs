@@ -16,21 +16,21 @@ namespace Rightek.HttpClient.Tests
     {
         public ClientTests()
         {
-            Client.Instance.SetDefault(s =>
+            Client.Instance.Init().SetDefault(s =>
             {
                 s.BaseAddress = "https://dl.dropboxusercontent.com/";
             });
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenUriIsEmpty()
+        public void Throw_argument_null_exception_when_uri_is_empty()
         {
             var expectedParameterName = "uri";
             var uri = "";
 
             try
             {
-                Client.Instance.WithUri(uri);
+                Client.Instance.Init().WithUri(uri);
             }
             catch (ArgumentException ex)
             {
@@ -39,7 +39,7 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenUsernameIsEmpty()
+        public void Throw_argument_null_exception_when_username_is_empty()
         {
             var expectedParameterName = "username";
             var username = "";
@@ -47,7 +47,7 @@ namespace Rightek.HttpClient.Tests
 
             try
             {
-                Client.Instance.WithBasicAuth(username, password);
+                Client.Instance.Init().WithBasicAuth(username, password);
             }
             catch (ArgumentException ex)
             {
@@ -56,7 +56,7 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenPasswordIsEmpty()
+        public void Throw_argument_null_exception_when_password_is_empty()
         {
             var expectedParameterName = "password";
             var username = "username";
@@ -64,7 +64,7 @@ namespace Rightek.HttpClient.Tests
 
             try
             {
-                Client.Instance.WithBasicAuth(username, password);
+                Client.Instance.Init().WithBasicAuth(username, password);
             }
             catch (ArgumentException ex)
             {
@@ -73,14 +73,14 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenBearerTokenIsEmpty()
+        public void Throw_argument_null_exception_when_bearer_token_is_empty()
         {
             var expectedParameterName = "bearerToken";
             var bearerToken = "";
 
             try
             {
-                Client.Instance.WithBearerToken(bearerToken);
+                Client.Instance.Init().WithBearerToken(bearerToken);
             }
             catch (ArgumentException ex)
             {
@@ -89,11 +89,11 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentExceptionWhenTimeoutIsZeroOrNegative()
+        public void Throw_argument_exception_when_timeout_is_zero_or_negative()
         {
             try
             {
-                Client.Instance.WithTimeout(TimeSpan.Zero);
+                Client.Instance.Init().WithTimeout(TimeSpan.Zero);
             }
             catch (ArgumentException ex)
             {
@@ -102,7 +102,7 @@ namespace Rightek.HttpClient.Tests
 
             try
             {
-                Client.Instance.WithTimeout(TimeSpan.FromSeconds(-1));
+                Client.Instance.Init().WithTimeout(TimeSpan.FromSeconds(-1));
             }
             catch (ArgumentException ex)
             {
@@ -111,7 +111,7 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenCookieNameIsEmpty()
+        public void Throw_argument_null_exception_when_cookie_name_is_empty()
         {
             var expectedParameterName = "name";
             var name = "";
@@ -119,7 +119,7 @@ namespace Rightek.HttpClient.Tests
 
             try
             {
-                Client.Instance.WithCookie(name, value);
+                Client.Instance.Init().WithCookie(name, value);
             }
             catch (ArgumentException ex)
             {
@@ -128,7 +128,7 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenCookieValueIsEmpty()
+        public void Throw_argument_null_exception_when_cookie_value_is_empty()
         {
             var expectedParameterName = "value";
             var name = "name";
@@ -136,7 +136,7 @@ namespace Rightek.HttpClient.Tests
 
             try
             {
-                Client.Instance.WithCookie(name, value);
+                Client.Instance.Init().WithCookie(name, value);
             }
             catch (ArgumentException ex)
             {
@@ -145,13 +145,13 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenCookiesIsNull()
+        public void Throw_argument_null_exception_when_cookies_is_null()
         {
             var expectedParameterName = "cookies";
 
             try
             {
-                Client.Instance.WithCookies(null);
+                Client.Instance.Init().WithCookies(null);
             }
             catch (ArgumentException ex)
             {
@@ -160,13 +160,13 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentExceptionWhenCookiesCountIsZero()
+        public void Throw_argument_exception_when_cookies_count_is_zero()
         {
             var cookies = new List<Cookie>();
 
             try
             {
-                Client.Instance.WithCookies(cookies);
+                Client.Instance.Init().WithCookies(cookies);
             }
             catch (ArgumentException ex)
             {
@@ -175,13 +175,13 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionWhenHeadersIsNull()
+        public void Throw_argument_null_exception_when_headers_is_null()
         {
             var expectedParameterName = "headers";
 
             try
             {
-                Client.Instance.WithHeaders(null);
+                Client.Instance.Init().WithHeaders(null);
             }
             catch (ArgumentException ex)
             {
@@ -190,13 +190,13 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public void ThrowArgumentExceptionWhenHeadersCountIsZero()
+        public void Throw_argument_exception_when_headers_count_is_zero()
         {
             var headers = new Dictionary<string, object>();
 
             try
             {
-                Client.Instance.WithHeaders(headers);
+                Client.Instance.Init().WithHeaders(headers);
             }
             catch (ArgumentException ex)
             {
@@ -205,24 +205,24 @@ namespace Rightek.HttpClient.Tests
         }
 
         [Fact]
-        public async Task BasicGetShouldWorkWithCorrectUri()
+        public async Task Get_should_work_with_correct_uri()
         {
-            Client.Instance.SetDefault(s => s.BaseAddress = null);
+            Client.Instance.Init().SetDefault(s => s.BaseAddress = null);
 
             var uri = "https://dl.dropboxusercontent.com/s/pqm5s3kx64q03fc/Rightek.HttpClient.json";
 
-            var res = await Client.Instance.WithUri(uri).GetAsync<WhatTypeOfMusicDoYouLove>();
+            var res = await Client.Instance.Init().WithUri(uri).GetAsync<WhatTypeOfMusicDoYouLove>();
 
             res.IsSuccessful.Should().BeTrue();
             res.Response.answer.Should().Be("Trance Music");
         }
 
         [Fact]
-        public async Task WithBasAddressGetShouldWork()
+        public async Task Get_should_work_with_base_address()
         {
             var uri = "s/pqm5s3kx64q03fc/Rightek.HttpClient.json";
 
-            var res = await Client.Instance.WithUri(uri).GetAsync<WhatTypeOfMusicDoYouLove>();
+            var res = await Client.Instance.Init().WithUri(uri).GetAsync<WhatTypeOfMusicDoYouLove>();
 
             res.IsSuccessful.Should().BeTrue();
             res.Response.answer.Should().Be("Trance Music");
