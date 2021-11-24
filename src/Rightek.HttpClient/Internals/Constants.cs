@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Rightek.HttpClient.Tests")]
+[assembly: InternalsVisibleTo("Rightek.HttpClient.UnitTests")]
 namespace Rightek.HttpClient.Internals
 {
     internal class Constants

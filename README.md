@@ -53,12 +53,11 @@ else
 
 - `DownloadAsync`: Download file
 - `UploadAsync`: Upload file
+- `UploadAsync<T>`: Upload file
 - `GetAsync`: Get http request
 - `GetAsync<T>`: Get http request
-- `PostAsync`: Post http request (JSON)
-- `PostAsync<T>`: Post http request (JSON)
-- `PostXmlAsync`: Post http request (XML)
-- `PostXmlAsync<T>`: Post http request (XML)
+- `PostAsync`: Post http request (No data, JSON, XML, Form, Byte Array)
+- `PostAsync<T>`: Post http request (No data, JSON, XML, Form, Byte Array)
 
 ## License
 MIT

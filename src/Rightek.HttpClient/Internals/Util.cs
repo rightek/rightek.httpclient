@@ -58,7 +58,7 @@ namespace Rightek.HttpClient.Internals
             // headers
             if (settings.Headers != null)
             {
-                foreach (var h in settings.Headers) req.Headers.Add(h.Key, Convert.ToString(h.Value));
+                foreach (var h in settings.Headers.Where(c => c.Key != "Content-Type")) req.Headers.Add(h.Key, Convert.ToString(h.Value));
             }
             // cookies
             if (settings.Cookies != null)
@@ -117,6 +117,13 @@ namespace Rightek.HttpClient.Internals
             if (o == null) return default;
 
             return JsonSerializer.Serialize(o);
+        }
+
+        public static string GetContentType(PostRequestType type)
+        {
+            if (type == PostRequestType.XML) return "text/xml";
+
+            return "application/json";
         }
     }
 }

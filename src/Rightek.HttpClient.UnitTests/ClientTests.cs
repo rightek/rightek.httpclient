@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -10,7 +9,7 @@ using Rightek.HttpClient.Internals;
 
 using Xunit;
 
-namespace Rightek.HttpClient.Tests
+namespace Rightek.HttpClient.UnitTests
 {
     public class ClientTests
     {

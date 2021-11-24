@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -249,7 +250,33 @@ namespace Rightek.HttpClient
             return await sendAsync<T>(settings, req, cancellationToken);
         }
 
-        public async Task<Response.Default> PostAsync(object data, CancellationToken cancellationToken = default)
+        public async Task<Response.Default> PostAsync(CancellationToken cancellationToken = default)
+        {
+            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
+
+            Util.PreValidate(settings);
+
+            var req = Util.GetRequest(HttpMethod.Post, settings);
+
+            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
+
+            return await sendAsync(settings, req, cancellationToken);
+        }
+
+        public async Task<Response.Default<T>> PostAsync<T>(CancellationToken cancellationToken = default)
+        {
+            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
+
+            Util.PreValidate(settings);
+
+            var req = Util.GetRequest(HttpMethod.Post, settings);
+
+            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
+
+            return await sendAsync<T>(settings, req, cancellationToken);
+        }
+
+        public async Task<Response.Default> PostAsync(object data, PostRequestType type = PostRequestType.JSON, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -257,15 +284,40 @@ namespace Rightek.HttpClient
 
             Util.PreValidate(settings);
 
+            var contentType = settings.Headers?.ContainsKey("Content-Type") ?? false
+                ? settings.Headers["Content-Type"].ToString()
+                : Util.GetContentType(type);
+
             var req = Util.GetRequest(HttpMethod.Post, settings);
-            req.Content = new StringContent(Util.Serialize(data), Encoding.UTF8, "application/json");
+
+            switch (type)
+            {
+                case PostRequestType.JSON:
+                    req.Content = new StringContent(Util.Serialize(data));
+                    req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                    break;
+
+                case PostRequestType.XML:
+                    req.Content = new StringContent((string)data);
+                    req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                    break;
+
+                case PostRequestType.FORM:
+                    req.Content = new FormUrlEncodedContent((IEnumerable<KeyValuePair<string, string>>)data);
+                    break;
+
+                case PostRequestType.BYTE_ARRAY:
+                    req.Content = new ByteArrayContent((byte[])data);
+                    req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                    break;
+            }
 
             if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
 
             return await sendAsync(settings, req, cancellationToken);
         }
 
-        public async Task<Response.Default<T>> PostAsync<T>(object data, CancellationToken cancellationToken = default)
+        public async Task<Response.Default<T>> PostAsync<T>(object data, PostRequestType type = PostRequestType.JSON, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -273,72 +325,33 @@ namespace Rightek.HttpClient
 
             Util.PreValidate(settings);
 
-            var req = Util.GetRequest(HttpMethod.Post, settings);
-            req.Content = new StringContent(Util.Serialize(data), Encoding.UTF8, "application/json");
-
-            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
-
-            return await sendAsync<T>(settings, req, cancellationToken);
-        }
-
-        public async Task<Response.Default> PostXmlAsync(string xml, CancellationToken cancellationToken = default)
-        {
-            if (string.IsNullOrWhiteSpace(xml)) throw new ArgumentNullException(nameof(xml));
-
-            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
-
-            Util.PreValidate(settings);
+            var contentType = settings.Headers?.ContainsKey("Content-Type") ?? false
+                ? settings.Headers["Content-Type"].ToString()
+                : Util.GetContentType(type);
 
             var req = Util.GetRequest(HttpMethod.Post, settings);
-            req.Content = new StringContent(xml, Encoding.UTF8, "text/xml");
 
-            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
+            switch (type)
+            {
+                case PostRequestType.JSON:
+                    req.Content = new StringContent(Util.Serialize(data));
+                    req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                    break;
 
-            return await sendAsync(settings, req, cancellationToken);
-        }
+                case PostRequestType.XML:
+                    req.Content = new StringContent((string)data);
+                    req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                    break;
 
-        public async Task<Response.Default<T>> PostXmlAsync<T>(string xml, CancellationToken cancellationToken = default)
-        {
-            if (string.IsNullOrWhiteSpace(xml)) throw new ArgumentNullException(nameof(xml));
+                case PostRequestType.FORM:
+                    req.Content = new FormUrlEncodedContent((IEnumerable<KeyValuePair<string, string>>)data);
+                    break;
 
-            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
-
-            Util.PreValidate(settings);
-
-            var req = Util.GetRequest(HttpMethod.Post, settings);
-            req.Content = new StringContent(xml, Encoding.UTF8, "text/xml");
-
-            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
-
-            return await sendAsync<T>(settings, req, cancellationToken);
-        }
-
-        public async Task<Response.Default> PostFormAsync(IEnumerable<KeyValuePair<string, string>> data, CancellationToken cancellationToken = default)
-        {
-            data.ThrowIfNull(nameof(data));
-
-            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
-
-            Util.PreValidate(settings);
-
-            var req = Util.GetRequest(HttpMethod.Post, settings);
-            req.Content = new FormUrlEncodedContent(data);
-
-            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
-
-            return await sendAsync(settings, req, cancellationToken);
-        }
-
-        public async Task<Response.Default<T>> PostFormAsync<T>(IEnumerable<KeyValuePair<string, string>> data, CancellationToken cancellationToken = default)
-        {
-            data.ThrowIfNull(nameof(data));
-
-            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
-
-            Util.PreValidate(settings);
-
-            var req = Util.GetRequest(HttpMethod.Post, settings);
-            req.Content = new FormUrlEncodedContent(data);
+                case PostRequestType.BYTE_ARRAY:
+                    req.Content = new ByteArrayContent((byte[])data);
+                    req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                    break;
+            }
 
             if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
 
@@ -409,6 +422,36 @@ namespace Rightek.HttpClient
             }
         }
 
+        public async Task<Response.Default> UploadAsync(byte[] bytes, string fileName = null, object data = null, CancellationToken cancellationToken = default)
+        {
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+            if (bytes.Length == 0) throw new ArgumentException(Constants.BYTES_ERROR_MESSAGE);
+
+            var settings = Util.ResolveSettings(_defaultSettings, _requestSettings);
+
+            Util.PreValidate(settings);
+
+            var req = Util.GetRequest(HttpMethod.Post, settings);
+
+            fileName = string.IsNullOrWhiteSpace(fileName) ? Guid.NewGuid().ToString() : fileName;
+
+            var mfdc = new MultipartFormDataContent
+            {
+                { new StringContent(Convert.ToBase64String(bytes), Encoding.Default, "application/octet-stream"), "file", fileName }
+            };
+
+            if (data != null)
+            {
+                mfdc.Add(new StringContent(Util.Serialize(data), Encoding.UTF8, "application/json"));
+            }
+
+            req.Content = mfdc;
+
+            if (settings.Timeout > TimeSpan.Zero) _httpClient.Timeout = settings.Timeout;
+
+            return await sendAsync(settings, req, cancellationToken);
+        }
+
         public async Task<Response.Default<T>> UploadAsync<T>(byte[] bytes, string fileName = null, object data = null, CancellationToken cancellationToken = default)
         {
             if (bytes == null) throw new ArgumentNullException(nameof(bytes));
@@ -420,7 +463,7 @@ namespace Rightek.HttpClient
 
             var req = Util.GetRequest(HttpMethod.Post, settings);
 
-            fileName = string.IsNullOrWhiteSpace(fileName) ? DateTime.Now.ToString("yyyyMMdd-HHmmss") : fileName;
+            fileName = string.IsNullOrWhiteSpace(fileName) ? Guid.NewGuid().ToString() : fileName;
 
             var mfdc = new MultipartFormDataContent
             {

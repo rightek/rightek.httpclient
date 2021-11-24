@@ -7,6 +7,8 @@ namespace Rightek.HttpClient.Interfaces
 {
     public interface IUpload
     {
+        Task<Response.Default> UploadAsync(byte[] bytes, string fileName = null, object data = null, CancellationToken cancellationToken = default);
+
         Task<Response.Default<T>> UploadAsync<T>(byte[] bytes, string fileName = null, object data = null, CancellationToken cancellationToken = default);
     }
 }

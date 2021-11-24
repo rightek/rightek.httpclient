@@ -6,7 +6,7 @@ using FluentAssertions;
 
 using Xunit;
 
-namespace Rightek.HttpClient.Tests
+namespace Rightek.HttpClient.UnitTests
 {
     public class AccessModifierTests
     {
