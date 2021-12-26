@@ -17,7 +17,7 @@ namespace Rightek.HttpClient.Interfaces
 
         IClient WithCookie(string name, string value);
 
-        IClient WithCookies(List<Cookie> cookies);
+        IClient WithCookies(IEnumerable<Cookie> cookies);
 
         IClient WithHeader(string key, object value);
 

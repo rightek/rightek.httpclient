@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -118,14 +119,14 @@ namespace Rightek.HttpClient
             return this;
         }
 
-        public IClient WithCookies(List<Cookie> cookies)
+        public IClient WithCookies(IEnumerable<Cookie> cookies)
         {
             cookies.ThrowIfNull(nameof(cookies));
-            if (cookies.Count == 0) throw new ArgumentException(Constants.COOKIES_ERROR_MESSAGE);
+            if (!cookies.Any()) throw new ArgumentException(Constants.COOKIES_ERROR_MESSAGE);
 
             if (_requestSettings == null) _requestSettings = new Settings();
 
-            _requestSettings.Cookies = cookies;
+            _requestSettings.Cookies = cookies.ToList();
 
             return this;
         }
@@ -190,10 +191,11 @@ namespace Rightek.HttpClient
 
         public IRequest Configure(Action<Settings> configure)
         {
-            _requestSettings = new Settings();
-
-            _requestSettings.Headers = new Dictionary<string, object>();
-            _requestSettings.Cookies = new List<Cookie>();
+            _requestSettings = new Settings
+            {
+                Headers = new Dictionary<string, object>(),
+                Cookies = new List<Cookie>()
+            };
 
             configure(_requestSettings);
 
@@ -276,6 +278,18 @@ namespace Rightek.HttpClient
             return await sendAsync<T>(settings, req, cancellationToken);
         }
 
+        public Task<Response.Default> PostFormAsync(IDictionary<string, string> data, CancellationToken cancellationToken = default)
+            => PostAsync(data.Select(c => new KeyValuePair<string, string>(c.Key, c.Value)), PostRequestType.FORM, cancellationToken);
+
+        public Task<Response.Default> PostXmlAsync(string xml, CancellationToken cancellationToken = default)
+            => PostAsync(xml, PostRequestType.XML, cancellationToken);
+
+        public Task<Response.Default> PostByteArrayAsync(byte[] bytes, CancellationToken cancellationToken = default)
+            => PostAsync(bytes, PostRequestType.BYTE_ARRAY, cancellationToken);
+
+        public Task<Response.Default> PostJsonAsync(object data, CancellationToken cancellationToken = default)
+            => PostAsync(data, PostRequestType.JSON, cancellationToken);
+
         public async Task<Response.Default> PostAsync(object data, PostRequestType type = PostRequestType.JSON, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -303,7 +317,7 @@ namespace Rightek.HttpClient
                     break;
 
                 case PostRequestType.FORM:
-                    req.Content = new FormUrlEncodedContent((IEnumerable<KeyValuePair<string, string>>)data);
+                    req.Content = new FormUrlEncodedContent(((IDictionary<string, string>)data).Select(c => new KeyValuePair<string, string>(c.Key, c.Value)));
                     break;
 
                 case PostRequestType.BYTE_ARRAY:
