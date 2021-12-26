@@ -331,6 +331,18 @@ namespace Rightek.HttpClient
             return await sendAsync(settings, req, cancellationToken);
         }
 
+        public Task<Response.Default<T>> PostFormAsync<T>(IDictionary<string, string> data, CancellationToken cancellationToken = default)
+            => PostAsync<T>(data.Select(c => new KeyValuePair<string, string>(c.Key, c.Value)), PostRequestType.FORM, cancellationToken);
+
+        public Task<Response.Default<T>> PostXmlAsync<T>(string xml, CancellationToken cancellationToken = default)
+            => PostAsync<T>(xml, PostRequestType.XML, cancellationToken);
+
+        public Task<Response.Default<T>> PostByteArrayAsync<T>(byte[] bytes, CancellationToken cancellationToken = default)
+            => PostAsync<T>(bytes, PostRequestType.BYTE_ARRAY, cancellationToken);
+
+        public Task<Response.Default<T>> PostJsonAsync<T>(object data, CancellationToken cancellationToken = default)
+            => PostAsync<T>(data, PostRequestType.JSON, cancellationToken);
+
         public async Task<Response.Default<T>> PostAsync<T>(object data, PostRequestType type = PostRequestType.JSON, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));

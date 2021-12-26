@@ -23,6 +23,14 @@ namespace Rightek.HttpClient.Interfaces
 
         Task<Response.Default> PostAsync(object data, PostRequestType type = PostRequestType.JSON, CancellationToken cancellationToken = default);
 
+        Task<Response.Default<T>> PostFormAsync<T>(IDictionary<string, string> data, CancellationToken cancellationToken = default);
+
+        Task<Response.Default<T>> PostXmlAsync<T>(string xml, CancellationToken cancellationToken = default);
+
+        Task<Response.Default<T>> PostByteArrayAsync<T>(byte[] bytes, CancellationToken cancellationToken = default);
+
+        Task<Response.Default<T>> PostJsonAsync<T>(object data, CancellationToken cancellationToken = default);
+
         Task<Response.Default<T>> PostAsync<T>(object data, PostRequestType type = PostRequestType.JSON, CancellationToken cancellationToken = default);
     }
 }

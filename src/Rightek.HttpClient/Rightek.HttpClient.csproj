@@ -10,9 +10,9 @@
 		<Company>Rightek</Company>
 		<Copyright>Rightek</Copyright>
 
-		<Version>3.1.0</Version>
-		<AssemblyVersion>3.1.0.0</AssemblyVersion>
-		<FileVersion>3.1.0.0</FileVersion>
+		<Version>3.1.1</Version>
+		<AssemblyVersion>3.1.1.0</AssemblyVersion>
+		<FileVersion>3.1.1.0</FileVersion>
 
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

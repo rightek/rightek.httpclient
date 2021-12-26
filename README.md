@@ -61,6 +61,10 @@ else
 - `PostByteArrayAsync`: Post http request
 - `PostJsonAsync`: Post http request
 - `PostAsync`: Post http request (No data, JSON, XML, Form, Byte Array)
+- `PostFormAsync<T>`: Post http request
+- `PostXmlAsync<T>`: Post http request
+- `PostByteArrayAsync<T>`: Post http request
+- `PostJsonAsync<T>`: Post http request
 - `PostAsync<T>`: Post http request (No data, JSON, XML, Form, Byte Array)
 
 ## License
