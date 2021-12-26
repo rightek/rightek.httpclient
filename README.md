@@ -56,6 +56,10 @@ else
 - `UploadAsync<T>`: Upload file
 - `GetAsync`: Get http request
 - `GetAsync<T>`: Get http request
+- `PostFormAsync`: Post http request
+- `PostXmlAsync`: Post http request
+- `PostByteArrayAsync`: Post http request
+- `PostJsonAsync`: Post http request
 - `PostAsync`: Post http request (No data, JSON, XML, Form, Byte Array)
 - `PostAsync<T>`: Post http request (No data, JSON, XML, Form, Byte Array)
 
